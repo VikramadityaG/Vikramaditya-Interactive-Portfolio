@@ -252,16 +252,16 @@ const HtmlOverlay = ({ currentSection }) => {
               
               <div className="space-y-3 text-white">
                 <p className="flex items-center justify-center gap-2">
-                  <span>📧</span> {portfolioData.personal.email}
+                  <span className="text-cyan-400 font-semibold">Email:</span> {portfolioData.personal.email}
                 </p>
                 <p className="flex items-center justify-center gap-2">
-                  <span>📱</span> {portfolioData.personal.phone}
+                  <span className="text-cyan-400 font-semibold">Phone:</span> {portfolioData.personal.phone}
                 </p>
                 <p className="flex items-center justify-center gap-2">
-                  <span>💼</span> {portfolioData.personal.linkedin}
+                  <span className="text-cyan-400 font-semibold">LinkedIn:</span> {portfolioData.personal.linkedin}
                 </p>
                 <p className="flex items-center justify-center gap-2">
-                  <span>🚀</span> {portfolioData.personal.github}
+                  <span className="text-cyan-400 font-semibold">GitHub:</span> {portfolioData.personal.github}
                 </p>
               </div>
               
