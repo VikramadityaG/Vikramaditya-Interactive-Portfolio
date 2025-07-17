@@ -9,7 +9,7 @@ const ScrollIndicator = ({ currentSection, totalSections }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
-      className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50"
+      className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 hidden md:block"
     >
       {!isLastSection && (
         <div className="flex flex-col items-center space-y-2 text-gray-400">
