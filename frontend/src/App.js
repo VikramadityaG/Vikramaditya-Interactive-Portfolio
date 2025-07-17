@@ -121,6 +121,12 @@ const App = () => {
             totalSections={totalSections} 
           />
           
+          {/* Mobile Indicator */}
+          <MobileIndicator 
+            currentSection={currentSection} 
+            totalSections={totalSections} 
+          />
+          
           {/* Background Gradient */}
           <motion.div
             initial={{ opacity: 0 }}
