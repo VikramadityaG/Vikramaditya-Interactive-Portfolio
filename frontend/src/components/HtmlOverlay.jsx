@@ -77,13 +77,13 @@ const HtmlOverlay = ({ currentSection }) => {
         return (
           <div className="text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-cyan-400 mb-8">PROFESSIONAL EXPERIENCE</h2>
-            <div className="space-y-6 max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto">
               {portfolioData.experience.map((exp, index) => (
                 <motion.div
                   key={exp.id}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.2 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
                   className="bg-gray-800/80 backdrop-blur-sm rounded-xl p-6 border border-gray-700 cursor-pointer hover:bg-gray-700/80 transition-colors"
                   onClick={() => toggleExperience(exp.id)}
                 >
