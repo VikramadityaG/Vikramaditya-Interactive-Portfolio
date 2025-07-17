@@ -27,7 +27,6 @@ export const HeroSection = () => {
         color="#64ffda"
         anchorX="center"
         anchorY="middle"
-        font="/fonts/Inter-Bold.woff"
       >
         {portfolioData.personal.name}
       </Text>
@@ -39,7 +38,6 @@ export const HeroSection = () => {
         color="#ffffff"
         anchorX="center"
         anchorY="middle"
-        font="/fonts/Inter-Regular.woff"
       >
         {portfolioData.personal.title}
       </Text>
@@ -51,7 +49,6 @@ export const HeroSection = () => {
         color="#aaaaaa"
         anchorX="center"
         anchorY="middle"
-        font="/fonts/Inter-Light.woff"
       >
         {portfolioData.personal.tagline}
       </Text>
