@@ -71,11 +71,7 @@ const App = () => {
           {/* HTML Content Overlay */}
           <HtmlOverlay currentSection={currentSection} />
           
-          {/* Navigation */}
-          <Navigation 
-            currentSection={currentSection} 
-            setCurrentSection={setCurrentSection} 
-          />
+
           
           {/* Section Indicator */}
           <SectionIndicator currentSection={currentSection} />
