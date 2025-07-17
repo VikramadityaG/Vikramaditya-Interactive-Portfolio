@@ -74,7 +74,7 @@ export const ContactSection = () => {
           maxWidth={9}
           font="/fonts/Inter-Regular.woff"
         >
-          📧 {portfolioData.personal.email}
+          {portfolioData.personal.email}
         </Text>
         
         <Text
@@ -86,7 +86,7 @@ export const ContactSection = () => {
           maxWidth={9}
           font="/fonts/Inter-Regular.woff"
         >
-          📱 {portfolioData.personal.phone}
+          {portfolioData.personal.phone}
         </Text>
         
         <Text
@@ -98,7 +98,7 @@ export const ContactSection = () => {
           maxWidth={9}
           font="/fonts/Inter-Light.woff"
         >
-          💼 {portfolioData.personal.linkedin}
+          {portfolioData.personal.linkedin}
         </Text>
         
         <Text
@@ -110,7 +110,7 @@ export const ContactSection = () => {
           maxWidth={9}
           font="/fonts/Inter-Light.woff"
         >
-          🚀 {portfolioData.personal.github}
+          {portfolioData.personal.github}
         </Text>
       </group>
       
