@@ -233,15 +233,6 @@ const HtmlOverlay = ({ currentSection }) => {
                 </motion.div>
               ))}
             </div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="mt-8 bg-gray-800/80 backdrop-blur-sm rounded-xl p-6 border border-gray-700 max-w-4xl mx-auto"
-            >
-              <h3 className="text-xl font-bold text-cyan-400 mb-3">SPECIAL MENTIONS</h3>
-              <p className="text-white">100+ Students Taught • VR Tech Demos • 40,000+ Event Attendees</p>
-            </motion.div>
           </div>
         );
       
