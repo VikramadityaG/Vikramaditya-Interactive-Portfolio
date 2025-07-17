@@ -31,7 +31,6 @@ export const EducationSection = () => {
         color="#64ffda"
         anchorX="center"
         anchorY="middle"
-        font="/fonts/Inter-Bold.woff"
       >
         EDUCATION
       </Text>
