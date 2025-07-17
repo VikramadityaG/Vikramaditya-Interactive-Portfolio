@@ -6,7 +6,7 @@ export const portfolioData = {
     phone: "+91-967-342-5099",
     portfolio: "https://www.crio.do/gaikwadvikramaditya/",
     linkedin: "linkedin.com/in/vikramaditya-gaikwad",
-    github: "github.com/vikramad98",
+    github: "github.com/VikramadityaG",
     title: "Software Engineer & Entrepreneur",
     tagline: "Building the future with immersive technologies"
   },
