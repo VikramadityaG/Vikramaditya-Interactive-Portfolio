@@ -68,6 +68,9 @@ const App = () => {
           {/* 3D Scene */}
           <Scene currentSection={currentSection} />
           
+          {/* HTML Content Overlay */}
+          <HtmlOverlay currentSection={currentSection} />
+          
           {/* Navigation */}
           <Navigation 
             currentSection={currentSection} 
