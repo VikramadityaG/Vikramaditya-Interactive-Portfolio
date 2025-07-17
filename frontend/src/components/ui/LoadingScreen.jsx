@@ -42,7 +42,7 @@ const LoadingScreen = ({ onComplete }) => {
                 VIKRAMADITYA
               </h1>
               <p className="text-xl text-gray-300">
-                AR/VR Developer & Entrepreneur
+                Software Engineer & Entrepreneur
               </p>
             </motion.div>
 
