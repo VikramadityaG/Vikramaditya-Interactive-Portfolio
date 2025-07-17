@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { portfolioData } from '../data/portfolioData';
 
 const HtmlOverlay = ({ currentSection }) => {
+  const [expandedExperience, setExpandedExperience] = useState(null);
+
+  const toggleExperience = (expId) => {
+    setExpandedExperience(expandedExperience === expId ? null : expId);
+  };
+
   const renderContent = () => {
     switch(currentSection) {
       case 0:
