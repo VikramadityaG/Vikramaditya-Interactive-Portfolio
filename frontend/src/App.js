@@ -6,6 +6,7 @@ import HtmlOverlay from './components/HtmlOverlay';
 import LoadingScreen from './components/ui/LoadingScreen';
 import SectionIndicator from './components/ui/SectionIndicator';
 import ScrollIndicator from './components/ui/ScrollIndicator';
+import MobileIndicator from './components/ui/MobileIndicator';
 import './App.css';
 
 const App = () => {
