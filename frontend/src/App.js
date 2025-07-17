@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Scene from './components/3d/Scene';
-import Navigation from './components/Navigation';
+
 import HtmlOverlay from './components/HtmlOverlay';
 import LoadingScreen from './components/ui/LoadingScreen';
 import SectionIndicator from './components/ui/SectionIndicator';
