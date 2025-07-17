@@ -86,7 +86,7 @@ export const EntrepreneurshipSection = () => {
           maxWidth={7}
           font="/fonts/Inter-Light.woff"
         >
-          Started: {portfolioData.entrepreneurship.startDate}
+          Started in {portfolioData.entrepreneurship.startDate}
         </Text>
         
         <Text
