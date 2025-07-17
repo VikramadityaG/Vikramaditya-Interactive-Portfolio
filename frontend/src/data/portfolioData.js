@@ -7,7 +7,7 @@ export const portfolioData = {
     portfolio: "https://www.crio.do/gaikwadvikramaditya/",
     linkedin: "linkedin.com/in/vikramaditya-gaikwad",
     github: "github.com/vikramad98",
-    title: "AR/VR Developer & Entrepreneur",
+    title: "Software Engineer & Entrepreneur",
     tagline: "Building the future with immersive technologies"
   },
 
@@ -129,7 +129,7 @@ export const portfolioData = {
       "Data structures and Algorithms", "DevOps"
     ],
     languages: [
-      "C/C++", "C Sharp", "Java", "Python", "JavaScript", "PHP", "Shell Scripting"
+      "C/C++", "C #", "Java", "Python", "JavaScript", "PHP", "Shell Scripting"
     ],
     tools: [
       "Intellij", "VScode", "Outsystems", "Mendix", "Eclipse", "Postman", 
