@@ -1,7 +1,7 @@
 // Mock data for Vikramaditya's 3D Portfolio
 export const portfolioData = {
   personal: {
-    name: "Vikramaditya Kalyanrao Gaikwad",
+    name: "Vikramaditya Gaikwad",
     email: "gaikwadvikramaditya@gmail.com",
     phone: "+91-967-342-5099",
     portfolio: "https://www.crio.do/gaikwadvikramaditya/",
