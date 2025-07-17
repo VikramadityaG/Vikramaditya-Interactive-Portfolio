@@ -12,6 +12,8 @@ const App = () => {
   const [currentSection, setCurrentSection] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   const totalSections = 8;
 
@@ -44,14 +46,50 @@ const App = () => {
       setTimeout(() => setIsScrolling(false), 1000);
     };
 
+    const handleTouchStart = (e) => {
+      setTouchStart(e.targetTouches[0].clientY);
+    };
+
+    const handleTouchMove = (e) => {
+      setTouchEnd(e.targetTouches[0].clientY);
+    };
+
+    const handleTouchEnd = () => {
+      if (!touchStart || !touchEnd) return;
+      
+      const distance = touchStart - touchEnd;
+      const isLeftSwipe = distance > 50;
+      const isRightSwipe = distance < -50;
+
+      if (isScrolling) return;
+
+      if (isLeftSwipe && currentSection < totalSections - 1) {
+        setIsScrolling(true);
+        setCurrentSection(prev => prev + 1);
+        setTimeout(() => setIsScrolling(false), 1000);
+      }
+      
+      if (isRightSwipe && currentSection > 0) {
+        setIsScrolling(true);
+        setCurrentSection(prev => prev - 1);
+        setTimeout(() => setIsScrolling(false), 1000);
+      }
+    };
+
     window.addEventListener('wheel', handleWheel);
     window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchmove', handleTouchMove);
+    window.addEventListener('touchend', handleTouchEnd);
 
     return () => {
       window.removeEventListener('wheel', handleWheel);
       window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [currentSection, isScrolling]);
+  }, [currentSection, isScrolling, touchStart, touchEnd]);
 
   const handleLoadingComplete = () => {
     setIsLoading(false);
