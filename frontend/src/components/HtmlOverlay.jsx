@@ -84,12 +84,39 @@ const HtmlOverlay = ({ currentSection }) => {
                   initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.2 }}
-                  className="bg-gray-800/80 backdrop-blur-sm rounded-xl p-6 border border-gray-700"
+                  className="bg-gray-800/80 backdrop-blur-sm rounded-xl p-6 border border-gray-700 cursor-pointer hover:bg-gray-700/80 transition-colors"
+                  onClick={() => toggleExperience(exp.id)}
                 >
                   <h3 className="text-xl font-bold text-orange-400 mb-2">{exp.company}</h3>
                   <p className="text-cyan-400 font-semibold mb-2">{exp.position}</p>
                   <p className="text-gray-300 text-sm mb-3">{exp.duration} • {exp.location}</p>
-                  <p className="text-white">{exp.responsibilities[0]}</p>
+                  {exp.product && (
+                    <p className="text-purple-400 font-medium mb-3">Product: {exp.product}</p>
+                  )}
+                  
+                  <div className="text-left">
+                    <p className="text-white mb-2">{exp.responsibilities[0]}</p>
+                    
+                    {expandedExperience === exp.id && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="space-y-2 mt-3"
+                      >
+                        {exp.responsibilities.slice(1).map((responsibility, idx) => (
+                          <p key={idx} className="text-gray-300 text-sm">• {responsibility}</p>
+                        ))}
+                      </motion.div>
+                    )}
+                  </div>
+                  
+                  <div className="text-right mt-3">
+                    <span className="text-cyan-400 text-sm">
+                      {expandedExperience === exp.id ? 'Click to collapse' : 'Click to expand'}
+                    </span>
+                  </div>
                 </motion.div>
               ))}
             </div>
