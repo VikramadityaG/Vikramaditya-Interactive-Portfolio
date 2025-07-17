@@ -2,14 +2,7 @@ import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Environment, OrbitControls } from '@react-three/drei';
 import { FloatingParticles } from './FloatingParticles';
-import { HeroSection } from './HeroSection';
-import { EducationSection } from './EducationSection';
-import { EntrepreneurshipSection } from './EntrepreneurshipSection';
-import { ExperienceSection } from './ExperienceSection';
-import { ProjectsSection } from './ProjectsSection';
-import { SkillsSection } from './SkillsSection';
-import { AchievementsSection } from './AchievementsSection';
-import { ContactSection } from './ContactSection';
+import { BackgroundEffects } from './BackgroundEffects';
 
 const Scene = ({ currentSection }) => {
   return (
@@ -37,15 +30,7 @@ const Scene = ({ currentSection }) => {
         <pointLight position={[10, 10, 10]} color="#ff6600" intensity={0.3} />
         
         <FloatingParticles />
-        
-        {currentSection === 0 && <HeroSection />}
-        {currentSection === 1 && <EducationSection />}
-        {currentSection === 2 && <EntrepreneurshipSection />}
-        {currentSection === 3 && <ExperienceSection />}
-        {currentSection === 4 && <ProjectsSection />}
-        {currentSection === 5 && <SkillsSection />}
-        {currentSection === 6 && <AchievementsSection />}
-        {currentSection === 7 && <ContactSection />}
+        <BackgroundEffects currentSection={currentSection} />
         
         <OrbitControls 
           enableZoom={false}
@@ -54,7 +39,8 @@ const Scene = ({ currentSection }) => {
           minPolarAngle={Math.PI / 2}
           enableDamping={true}
           dampingFactor={0.05}
-          autoRotate={false}
+          autoRotate={true}
+          autoRotateSpeed={0.5}
         />
       </Suspense>
     </Canvas>
