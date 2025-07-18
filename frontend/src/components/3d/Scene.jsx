@@ -49,6 +49,8 @@ const Scene = ({ currentSection, onSectionChange, isRacingMode = true }) => {
             <F1Car 
               position={[0, 2, 0]} 
               onPositionChange={handleCarPositionChange}
+              onSectionChange={onSectionChange}
+              currentSection={currentSection}
             />
             <RacingCamera 
               carPosition={carPosition} 
