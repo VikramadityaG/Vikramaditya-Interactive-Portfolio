@@ -1,13 +1,13 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useBox, useRaycastVehicle } from '@react-three/cannon';
+import { useBox } from '@react-three/cannon';
 import { Box, Cylinder, Sphere } from '@react-three/drei';
 import * as THREE from 'three';
 
-export const F1Car = ({ position, onPositionChange }) => {
+export const F1Car = ({ position, onPositionChange, onSectionChange, currentSection }) => {
   const [chassis, chassisApi] = useBox(() => ({
     mass: 500,
-    position: position || [0, 0, 0],
+    position: position || [0, 1, 0],
     args: [2, 0.5, 4],
     material: { friction: 0.1, restitution: 0.1 },
   }));
@@ -18,77 +18,6 @@ export const F1Car = ({ position, onPositionChange }) => {
     material: { friction: 0.7, restitution: 0.1 },
   }));
 
-  const vehicle = useRaycastVehicle(() => ({
-    chassisBody: chassis,
-    wheelInfos: [
-      {
-        radius: 0.3,
-        directionLocal: [0, -1, 0],
-        axleLocal: [1, 0, 0],
-        suspensionStiffness: 60,
-        suspensionRestLength: 0.1,
-        maxSuspensionForce: 10000,
-        maxSuspensionTravel: 0.3,
-        dampingRelaxation: 10,
-        dampingCompression: 10,
-        frictionSlip: 5,
-        rollInfluence: 0.01,
-        useCustomSlidingRotationalSpeed: true,
-        customSlidingRotationalSpeed: -30,
-        isFrontWheel: true,
-      },
-      {
-        radius: 0.3,
-        directionLocal: [0, -1, 0],
-        axleLocal: [1, 0, 0],
-        suspensionStiffness: 60,
-        suspensionRestLength: 0.1,
-        maxSuspensionForce: 10000,
-        maxSuspensionTravel: 0.3,
-        dampingRelaxation: 10,
-        dampingCompression: 10,
-        frictionSlip: 5,
-        rollInfluence: 0.01,
-        useCustomSlidingRotationalSpeed: true,
-        customSlidingRotationalSpeed: -30,
-        isFrontWheel: true,
-      },
-      {
-        radius: 0.3,
-        directionLocal: [0, -1, 0],
-        axleLocal: [1, 0, 0],
-        suspensionStiffness: 60,
-        suspensionRestLength: 0.1,
-        maxSuspensionForce: 10000,
-        maxSuspensionTravel: 0.3,
-        dampingRelaxation: 10,
-        dampingCompression: 10,
-        frictionSlip: 5,
-        rollInfluence: 0.01,
-        useCustomSlidingRotationalSpeed: true,
-        customSlidingRotationalSpeed: -30,
-        isFrontWheel: false,
-      },
-      {
-        radius: 0.3,
-        directionLocal: [0, -1, 0],
-        axleLocal: [1, 0, 0],
-        suspensionStiffness: 60,
-        suspensionRestLength: 0.1,
-        maxSuspensionForce: 10000,
-        maxSuspensionTravel: 0.3,
-        dampingRelaxation: 10,
-        dampingCompression: 10,
-        frictionSlip: 5,
-        rollInfluence: 0.01,
-        useCustomSlidingRotationalSpeed: true,
-        customSlidingRotationalSpeed: -30,
-        isFrontWheel: false,
-      },
-    ],
-    wheelBodies: [wheels, wheels, wheels, wheels],
-  }));
-
   const controls = useRef({
     forward: false,
     backward: false,
@@ -96,9 +25,43 @@ export const F1Car = ({ position, onPositionChange }) => {
     right: false,
   });
 
-  const engineForce = 300;
-  const maxSteerVal = 0.5;
-  const brakeForce = 50;
+  const [carPosition, setCarPosition] = useState(new THREE.Vector3(0, 1, 0));
+  const [lastSection, setLastSection] = useState(0);
+
+  const engineForce = 800;
+  const maxSteerVal = 0.8;
+  const brakeForce = 100;
+
+  // Track sections for collision detection
+  const trackSections = [
+    { position: [0, 0, 0], section: 0 },
+    { position: [0, 0, -20], section: 1 },
+    { position: [20, 0, -20], section: 2 },
+    { position: [20, 0, 0], section: 3 },
+    { position: [20, 0, 20], section: 4 },
+    { position: [0, 0, 20], section: 5 },
+    { position: [-20, 0, 20], section: 6 },
+    { position: [-20, 0, 0], section: 7 },
+  ];
+
+  const checkSectionCollision = (carPos) => {
+    const threshold = 8; // Distance to trigger section change
+    for (let i = 0; i < trackSections.length; i++) {
+      const section = trackSections[i];
+      const distance = Math.sqrt(
+        Math.pow(carPos.x - section.position[0], 2) + 
+        Math.pow(carPos.z - section.position[2], 2)
+      );
+      
+      if (distance < threshold && section.section !== lastSection) {
+        setLastSection(section.section);
+        if (onSectionChange) {
+          onSectionChange(section.section);
+        }
+        break;
+      }
+    }
+  };
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -166,66 +129,90 @@ export const F1Car = ({ position, onPositionChange }) => {
     const force = forward ? -engineForce : backward ? engineForce : 0;
     const steer = left ? -maxSteerVal : right ? maxSteerVal : 0;
 
-    vehicle.setSteeringValue(steer, 0);
-    vehicle.setSteeringValue(steer, 1);
-    vehicle.applyEngineForce(force, 2);
-    vehicle.applyEngineForce(force, 3);
-
-    if (!forward && !backward) {
-      vehicle.setBrake(brakeForce, 2);
-      vehicle.setBrake(brakeForce, 3);
-    } else {
-      vehicle.setBrake(0, 2);
-      vehicle.setBrake(0, 3);
-    }
-
-    // Get car position for camera following
-    if (onPositionChange && chassis.current) {
+    // Apply forces to chassis
+    if (chassis.current) {
+      const velocity = chassis.current.velocity;
       const position = chassis.current.position;
-      onPositionChange(position);
+      
+      // Apply engine force
+      if (forward || backward) {
+        const forwardVector = new THREE.Vector3(0, 0, force);
+        forwardVector.applyQuaternion(chassis.current.quaternion);
+        chassisApi.applyForce([forwardVector.x, forwardVector.y, forwardVector.z], [0, 0, 0]);
+      }
+
+      // Apply steering (torque)
+      if (left || right) {
+        chassisApi.applyTorque([0, steer * 200, 0]);
+      }
+
+      // Apply drag
+      if (velocity) {
+        const dragForce = -0.05;
+        chassisApi.applyForce([velocity.x * dragForce, 0, velocity.z * dragForce], [0, 0, 0]);
+      }
+
+      // Update car position
+      const newPosition = new THREE.Vector3(position.x, position.y, position.z);
+      setCarPosition(newPosition);
+      
+      // Check for section changes
+      checkSectionCollision(newPosition);
+      
+      // Callback for camera following
+      if (onPositionChange) {
+        onPositionChange(newPosition);
+      }
     }
   });
 
   return (
     <group>
       {/* Car Chassis */}
-      <Box ref={chassis} args={[2, 0.5, 4]}>
+      <Box ref={chassis} args={[2, 0.5, 4]} position={position}>
         <meshStandardMaterial color="#FF0000" />
       </Box>
 
       {/* Car Body Details */}
-      <Box position={[0, 0.3, 0]} args={[1.5, 0.3, 3]}>
+      <Box args={[1.5, 0.3, 3]} position={[carPosition.x, carPosition.y + 0.3, carPosition.z]}>
         <meshStandardMaterial color="#000000" />
       </Box>
 
       {/* Front Wing */}
-      <Box position={[0, 0.1, 2.2]} args={[1.8, 0.1, 0.3]}>
+      <Box args={[1.8, 0.1, 0.3]} position={[carPosition.x, carPosition.y + 0.1, carPosition.z + 2.2]}>
         <meshStandardMaterial color="#333333" />
       </Box>
 
       {/* Rear Wing */}
-      <Box position={[0, 0.8, -2]} args={[1.6, 0.1, 0.4]}>
+      <Box args={[1.6, 0.1, 0.4]} position={[carPosition.x, carPosition.y + 0.8, carPosition.z - 2]}>
         <meshStandardMaterial color="#333333" />
       </Box>
 
       {/* Wheels */}
-      <Cylinder position={[0.8, -0.2, 1.5]} args={[0.3, 0.3, 0.2]} rotation={[0, 0, Math.PI / 2]}>
+      <Cylinder args={[0.3, 0.3, 0.2]} position={[carPosition.x + 0.8, carPosition.y - 0.2, carPosition.z + 1.5]} rotation={[0, 0, Math.PI / 2]}>
         <meshStandardMaterial color="#111111" />
       </Cylinder>
-      <Cylinder position={[-0.8, -0.2, 1.5]} args={[0.3, 0.3, 0.2]} rotation={[0, 0, Math.PI / 2]}>
+      <Cylinder args={[0.3, 0.3, 0.2]} position={[carPosition.x - 0.8, carPosition.y - 0.2, carPosition.z + 1.5]} rotation={[0, 0, Math.PI / 2]}>
         <meshStandardMaterial color="#111111" />
       </Cylinder>
-      <Cylinder position={[0.8, -0.2, -1.5]} args={[0.3, 0.3, 0.2]} rotation={[0, 0, Math.PI / 2]}>
+      <Cylinder args={[0.3, 0.3, 0.2]} position={[carPosition.x + 0.8, carPosition.y - 0.2, carPosition.z - 1.5]} rotation={[0, 0, Math.PI / 2]}>
         <meshStandardMaterial color="#111111" />
       </Cylinder>
-      <Cylinder position={[-0.8, -0.2, -1.5]} args={[0.3, 0.3, 0.2]} rotation={[0, 0, Math.PI / 2]}>
+      <Cylinder args={[0.3, 0.3, 0.2]} position={[carPosition.x - 0.8, carPosition.y - 0.2, carPosition.z - 1.5]} rotation={[0, 0, Math.PI / 2]}>
         <meshStandardMaterial color="#111111" />
       </Cylinder>
 
       {/* Cockpit */}
-      <Sphere position={[0, 0.6, 0.5]} args={[0.5, 16, 16]}>
+      <Sphere args={[0.5, 16, 16]} position={[carPosition.x, carPosition.y + 0.6, carPosition.z + 0.5]}>
         <meshStandardMaterial color="#0066FF" transparent opacity={0.7} />
       </Sphere>
+
+      {/* Exhaust flames effect */}
+      {controls.current.forward && (
+        <Cylinder args={[0.1, 0.3, 0.5]} position={[carPosition.x, carPosition.y + 0.2, carPosition.z - 2.5]} rotation={[Math.PI / 2, 0, 0]}>
+          <meshStandardMaterial color="#FF6600" emissive="#FF6600" emissiveIntensity={0.5} />
+        </Cylinder>
+      )}
     </group>
   );
 };
